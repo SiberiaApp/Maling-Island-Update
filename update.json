@@ -1,9 +1,9 @@
 {
-  "versionName": "1.0.3",
-  "versionCode": 2026072802,
+  "versionName": "1.1.1",
+  "versionCode": 202607281000,
   "isForceUpdate": false,
   "updateTitle": "新版本更新",
-  "updateLog": "【更新内容】\n1.优化UI磨砂玻璃质感\n2.修复取餐码刷新异常\n3.适配最新系统版本",
+  "updateLog": "欢迎使用码灵属，本次更新带来了绕过小米超级岛白名单的功能。如您在使用中遇到任何问题，欢迎前往「设置-关于软件-在线反馈」进行反馈或提出宝贵建议。\n\n新增 在线更新版本检测\n新增 导出当天日志\n新增 Shizuku绕过小米超级岛白名单\n新增 测试模型连通性\n新增 软件内显示开源地址\n新增 在线反馈入口\n优化 上岛体验与上岛布局",
   "fileSize": "8.6M",
   "webdownloadUrl": "https://github.com/xxx/xxx/releases",
   "updateTime": "2026-07-28"

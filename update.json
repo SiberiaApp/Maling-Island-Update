@@ -1,10 +1,10 @@
 {
-  "versionName": "1.1.1",
-  "versionCode": 2026072848,
+  "versionName": "1.1.2",
+  "versionCode": 2026072910,
   "isForceUpdate": false,
   "updateTitle": "新版本更新",
-  "updateLog": "欢迎使用码灵属，如果您在使用中遇到任何问题，欢迎加入QQ群1077121396或前往「设置-关于软件-在线反馈」进行反馈或提出宝贵建议。\n\n新增 Live Update 和小米超级岛二选一\n删除 自动识别通知文本功能\n优化 多取件码/取餐码的识别上岛\n优化 导出日志内容",
+  "updateLog": "欢迎使用码灵属，如果您在使用中遇到任何问题，欢迎加入QQ群1077121396或前往「设置-关于软件-在线反馈」进行反馈或提出宝贵建议。\n\n新增 支持登录MiClaw封测资格账号进行上岛识别，不使用API模型平台\n新增 截图分享识别\n新增 取件码/取餐码识别时上岛(仅小米超级岛)\n修复 使用磁贴功能无法识别",
   "fileSize": "16.2MB",
   "webdownloadUrl": "https://pan.quark.cn/s/4b4d7ac31352",
-  "updateTime": "2026-07-28"
+  "updateTime": "2026-07-29"
 }

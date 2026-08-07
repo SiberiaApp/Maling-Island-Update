@@ -12,7 +12,7 @@ description: 连接并操作码灵属 MCP 服务，处理取码相关工作流�
 1. 确认码灵属 MCP 工具或资源可用。
 2. 如果不可用，提示用户在应用中开启 `设置 -> 模型设置 -> AI Agent（MCP）`，再将应用复制的本机配置或局域网配置添加到 MCP 客户端。
 3. MCP 连接已经配置时，禁止索取、打印、记录或暴露 Bearer 令牌。
-4. 需要确认工具参数、资源 URI、订单字段、连接方法或错误处理细节时，读取 [references/mcp-reference.md](references/mcp-reference.md)。
+4. 需要确认工具参数、资源 URI、订单字段、连接方法或错误处理细节时，查阅本文后半部分的“MCP 接口参考”。
 
 ## 选择工作流
 
@@ -103,3 +103,136 @@ description: 连接并操作码灵属 MCP 服务，处理取码相关工作流�
 - 截图失败：提示用户在码灵属中选择并授权 Shizuku 或 Root。后台 MCP 调用无法发起媒体投影授权。
 - `orders` JSON 无效：重新构造合法 JSON，确保 `orders` 数组不为空，并且至少包含一个有效 `code`。
 - 任务处理失败：调用 `fail_recognition_task`，不要直接丢弃任务；否则任务会保持处理中，直到领取租约超时。
+
+## MCP 接口参考
+
+### 连接
+
+- 传输方式：Streamable HTTP
+- 默认本机地址：`http://127.0.0.1:8765/mcp`
+- 认证方式：`Authorization: Bearer <token>`
+- USB 端口转发：`adb forward tcp:8765 tcp:8765`
+- 局域网地址：手机 IPv4 地址可能发生变化，应从应用中复制当前配置。
+
+客户端配置示例：
+
+```json
+{
+  "mcpServers": {
+    "maling-island": {
+      "type": "streamable-http",
+      "url": "http://127.0.0.1:8765/mcp",
+      "headers": {
+        "Authorization": "Bearer <token>"
+      }
+    }
+  }
+}
+```
+
+从 `设置 -> 模型设置 -> AI Agent（MCP）` 获取完整配置。不要让用户把令牌粘贴到对话中。
+
+### 资源
+
+- `maling://prompt/recognition`：返回当前保存的识别提示词和二维码字段规则。每次识别前读取一次。
+- `maling://pickups/unfinished`：以 JSON 格式返回全部未完成记录。
+- `maling://recognition/latest`：返回码灵属保存的最后一次识别结果 JSON。
+
+### `get_recognition_prompt`
+
+参数：无。返回与 `maling://prompt/recognition` 相同的当前提示词。
+
+### `list_unfinished_pickups`
+
+参数：无。以 JSON 格式返回全部未完成记录。
+
+### `republish_pickup`
+
+参数：
+
+```json
+{
+  "query": "取码、品牌或地点的部分文本"
+}
+```
+
+匹配不区分大小写，检查 `code`、`brand` 和地点。空查询会匹配全部未完成记录，只能在用户明确要求时使用。
+
+### `list_pending_recognition_tasks`
+
+参数：无。返回磁贴或无障碍快捷方式创建、尚未完成的 Agent 识别任务。该工具只用于查看状态；常驻 Agent 应使用 `wait_for_recognition_task` 领取任务。
+
+### `wait_for_recognition_task`
+
+参数：
+
+```json
+{
+  "timeoutSeconds": 20
+}
+```
+
+最长等待 25 秒并领取最早的可用任务。返回内容包含任务元数据、当前识别提示词和 JPEG 截图。没有任务时返回 `{"task":null}`。任务领取后有 5 分钟租约，租约到期后可以重新领取。
+
+### `fail_recognition_task`
+
+参数：
+
+```json
+{
+  "taskId": "wait_for_recognition_task 返回的任务 ID",
+  "error": "图片中没有有效取码"
+}
+```
+
+关闭该任务的“正在识别”状态并清理任务截图。无法产生有效 `orders` 时必须调用此工具。
+
+### `capture_current_screen`
+
+参数：无。通过码灵属当前配置的截图方式返回 JPEG 图片。MCP 后台截图支持 Shizuku 和 Root，不会弹出媒体投影授权界面。
+
+### `submit_recognition_results`
+
+参数：
+
+```json
+{
+  "taskId": "可选的快捷识别任务 ID",
+  "orders": "{\"orders\":[{\"code\":\"001\",\"type\":\"饮品\",\"brand\":\"古茗\",\"pickupLocation\":\"万达店\"}]}"
+}
+```
+
+`orders` 是包含 JSON 对象的字符串，不是直接嵌套的数组。每个有效订单会单独保存，并根据码灵属当前选择的通知方式单独发布通知。
+
+处理 `wait_for_recognition_task` 返回的任务时必须传入对应 `taskId`。码灵属会在提交成功后关闭“正在识别”状态、清理任务截图，并将本地解码出的二维码内容补到首条缺少 `qrPayload` 的订单中。Agent 主动调用 `capture_current_screen` 时不需要 `taskId`。
+
+### 支持的订单字段
+
+- `code`：必填；取码、随手记标题或电影名称
+- `type`：用于判断取餐、取件、电影票、票务或随手记类型
+- `brand`：商家、快递公司、影院、场馆或品牌
+- `fullText`：来源文本上下文
+- `pickupLocation`：门店、取件地点、地址、影厅或座位
+- `day`：电影日期
+- `time`：电影场次时间，推荐格式为 `HH:mm-HH:mm`
+- `qrPayload`：解码后的二维码内容
+
+解析器还支持以下别名：
+
+- `code`：`pickupCode`、`pickup_code`、`number`、`ticketName`、`movieName`
+- `type`：`category`、`kind`
+- `brand`：`shop`、`merchant`、`carrier`
+- `pickupLocation`：`location`、`store`、`address`、`seat`
+- `day`：`date`、`movieDay`
+- `time`：`movieTime`、`showTime`
+- `qrPayload`：`qr`、`qrcode`、`qrCode`、`qrUrl`
+
+即使支持别名，也应优先使用标准字段。
+
+### 类型映射
+
+- `type` 包含 `快递`、`取件` 或 `包裹` 时，创建取件记录。
+- `type` 包含 `电影票`、`电影` 或 `影院` 时，创建电影票记录。
+- `type` 包含 `票务`、`演唱`、`音乐节` 或 `场馆` 时，创建票务记录。
+- `type` 包含 `随手记` 或 `笔记` 时，创建随手记记录。
+- 其他值创建取餐记录。

@@ -1,10 +1,10 @@
 {
-  "versionName": "0.1.1",
-  "versionCode": 2026090120,
+  "versionName": "0.1.0",
+  "versionCode": 2026083122,
   "isForceUpdate": false,
   "updateTitle": "新版本更新",
   "updateLog": "新起点。/nSuperEPG第一个版本发布，欢迎体验。",
-  "fileSize": "19.25MB",
+  "fileSize": "1.62MB",
   "webdownloadUrl": "https://pan.quark.cn/s/4b4d7ac31352",
   "updateTime": "2026-08-31"
 }

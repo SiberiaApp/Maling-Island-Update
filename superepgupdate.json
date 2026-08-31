@@ -1,1 +1,10 @@
-
+{
+  "versionName": "1.2.0",
+  "versionCode": 2026080911,
+  "isForceUpdate": false,
+  "updateTitle": "新版本更新",
+  "updateLog": "111",
+  "fileSize": "19.25MB",
+  "webdownloadUrl": "https://pan.quark.cn/s/4b4d7ac31352",
+  "updateTime": "2026-08-09"
+}

@@ -1,10 +1,10 @@
 {
-  "versionName": "1.2.0",
-  "versionCode": 2026080911,
+  "versionName": "2.0.2",
+  "versionCode": 2026092722,
   "isForceUpdate": false,
   "updateTitle": "新版本更新",
-  "updateLog": "欢迎使用码灵属，如果您在使用中遇到任何问题，欢迎加入QQ群1077121396或前往「设置-关于软件-在线反馈」进行反馈或提出宝贵建议。\n为提升用户体验，我们将在夸克网盘和QQ群聊同步更新发版，欢迎加入QQ群1077121396获取最新版本。\n不出意外的话，v1.2.0将是一代码灵属的最后一个版本（当然如果我抢到了赵雷演唱会的票我还会再更新一个演唱会特供版）。\n未来，码灵属 NEXT 或其他名称软件将接替码灵属，软件定位也有所不同，敬请期待。\n\n新增 AI Agent（MCP）快捷识别模式（试验性功能）\n新增 类 HyperOS 4 底栏布局\n新增 深色模式的适配\n新增 自由拖动取码内容\n修复 Agent 返回非标准 JSON 导致识别类型错误\n优化 桌面小部件的体验",
-  "fileSize": "19.25MB",
-  "webdownloadUrl": "https://pan.quark.cn/s/4b4d7ac31352",
-  "updateTime": "2026-08-09"
+  "updateLog": "新起点。\n票灵阁 2.0 正式接棒码灵属 欢迎下载体验。\n为提升用户体验，我们将在夸克网盘和QQ群聊同步更新发版，欢迎加入QQ群1077121396获取最新版本。",
+  "fileSize": "35.67MB",
+  "webdownloadUrl": "https://pan.quark.cn/s/9868a7ab01d5",
+  "updateTime": "2026-09-27"
 }
